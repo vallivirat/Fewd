@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const Weather = () => {
   const [weather, setWeather] = useState(null);
@@ -9,18 +10,12 @@ const Weather = () => {
     const apiKey = "175def0da29397f9d62e84f8b472a75e";
     const fetchWeather = async () => {
       try {
-        const res = await fetch(
+        const res = await axios.get(
           `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`
         );
-        const data = await res.json();
-
-        if (data.cod !== 200) {
-          setError(data.message);
-          setWeather(null);
-        } else {
-          setWeather(data);
-          setError(null);
-        }
+        setWeather(res.data);
+        setError(null);
+        console.log(res);
       } catch (err) {
         setError("Failed to fetch weather data.");
         setWeather(null);
